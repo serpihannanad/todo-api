@@ -7,16 +7,16 @@ const statsRoutes = require("./routes/stats.routes");
 const logger = require("./middlewares/logger.middleware");
 const notFound = require("./middlewares/notFound.middleware");
 const errorHandler = require("./middlewares/errorHandler.middleware");
- 
+
 const app = express();
- 
+
 app.use(logger);
 app.use(express.json());
- 
+
 app.get("/", (req, res) => {
   res.json({ message: "Todo API is running" });
 });
- 
+
 const options = {
   customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
   customJs: [
@@ -25,17 +25,18 @@ const options = {
   ]
 };
 
+// Ubah parameter kedua menjadi 'options' (bukan { customCssUrl: CSS_URL, customJs: JS_URL })
 app.use(
   "/api-docs",
   swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, { customCssUrl: CSS_URL, customJs: JS_URL })
+  swaggerUi.setup(swaggerSpec, options)
 );
- 
+
 app.use("/api/auth", authRoutes);
 app.use("/api/todos", todoRoutes);
 app.use("/api/stats", statsRoutes);
- 
+
 app.use(notFound);
 app.use(errorHandler);
- 
+
 module.exports = app;
