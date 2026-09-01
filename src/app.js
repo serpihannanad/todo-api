@@ -25,7 +25,11 @@ const options = {
   ]
 };
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, { customCssUrl: CSS_URL, customJs: JS_URL })
+);
  
 app.use("/api/auth", authRoutes);
 app.use("/api/todos", todoRoutes);
