@@ -35,8 +35,26 @@ const options = {
             description: { type: "string", example: "Menulis dokumentasi endpoint todo" },
             completed: { type: "boolean", example: false },
             owner: { type: "string", example: "665f1a2b8b1e2a1a2c3d1111" },
-            createdAt: { type: "string", format: "date-time" },
-            updatedAt: { type: "string", format: "date-time" },
+            created_by: {
+              type: "string",
+              example: "665f1a2b8b1e2a1a2c3d1111",
+            },
+            updated_by: {
+              type: "string",
+              example: "665f1a2b8b1e2a1a2c3d1111",
+            },
+            created_at: {
+              type: "string",
+              format: "date-time",
+            },
+            updated_at: {
+              type: "string",
+              format: "date-time",
+            },
+            archived: {
+              type: "boolean",
+              example: false,
+            },
           },
         },
     },

@@ -5,14 +5,31 @@ async function createTodo(data) {
     title: data.title,
     description: data.description,
     owner: data.owner,
+    created_by: data.created_by,
+    updated_by: data.updated_by,
   });
+
   return await todo.save();
 }
 
 async function getAllTodos(ownerId, queryOptions) {
-  const { page = 1, limit = 10, completed, sortBy = "createdAt", order = "desc" } = queryOptions;
+  const { page = 1, limit = 10, completed, sortBy = "created_at", order = "desc" } = queryOptions;
 
-  const filter = { owner: ownerId };
+  async function getAllTodos(ownerId, queryOptions) {
+    const {
+      page = 1,
+      limit = 10,
+      completed,
+      sortBy = "created_at",
+      order = "desc",
+    } = queryOptions;
+  
+    const filter = {
+      owner: ownerId,
+      archived: false,
+    };
+  };
+  
 
   // Filter berdasarkan status completed, hanya jika parameter dikirim
   if (completed !== undefined) {
@@ -44,9 +61,17 @@ async function getAllTodos(ownerId, queryOptions) {
 }
 
 async function getAllTodosForAdmin(queryOptions) {
-  const { page = 1, limit = 10, completed, sortBy = "createdAt", order = "desc" } = queryOptions;
+  const {
+    page = 1,
+    limit = 10,
+    completed,
+    sortBy = "created_at",
+    order = "desc",
+  } = queryOptions;
 
-  const filter = {};
+  const filter = {
+    archived: false,
+  };
 
   if (completed !== undefined) {
     filter.completed = completed === "true";
@@ -85,14 +110,15 @@ async function updateTodo(id, data) {
   return await Todo.findByIdAndUpdate(
     id,
     {
-      title: data.title,
-      description: data.description,
-      completed: data.completed,
+        title: data.title,
+        description: data.description,
+        completed: data.completed,
+        archived: data.archived,
+        updated_by: data.updated_by,
     },
     { new: true, runValidators: true }
   );
 }
-
 async function deleteTodo(id) {
   return await Todo.findByIdAndDelete(id);
 }

@@ -9,6 +9,8 @@ const createTodo = catchAsync(async (req, res, next) => {
     title,
     description,
     owner: req.user._id,
+    created_by: req.user._id,
+    updated_by: req.user._id,
   });
 
   res.status(201).json({
@@ -58,7 +60,7 @@ const getTodoById = catchAsync(async (req, res, next) => {
 
 const updateTodo = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const { title, description, completed } = req.body;
+  const { title, description, completed, archived } = req.body;
 
   const existingTodo = await todoService.getTodoById(id);
 
@@ -72,7 +74,13 @@ const updateTodo = catchAsync(async (req, res, next) => {
     return next(new AppError("You do not have permission to update this todo", 403));
   }
 
-  const updatedTodo = await todoService.updateTodo(id, { title, description, completed });
+  const updatedTodo = await todoService.updateTodo(id, {
+    title,
+    description,
+    completed,
+    archived,
+    updated_by: req.user._id,
+  });
 
   res.status(200).json({
     success: true,

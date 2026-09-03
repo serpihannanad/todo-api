@@ -84,7 +84,7 @@ router.post("/", createTodoRules, validate, todoController.createTodo);
  *         name: sortBy
  *         schema:
  *           type: string
- *           enum: [createdAt, title, completed]
+ *           enum: [created_at, title, completed]
  *         description: Field yang dipakai untuk mengurutkan data
  *       - in: query
  *         name: order

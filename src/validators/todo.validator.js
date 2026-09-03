@@ -56,8 +56,8 @@ const getAllTodosRules = [
 
   query("sortBy")
     .optional()
-    .isIn(["createdAt", "title", "completed"])
-    .withMessage("sortBy must be one of: createdAt, title, completed"),
+    .isIn(["created_at", "title", "completed"])
+    .withMessage("sortBy must be one of: created_at, title, completed"),
 
   query("order")
     .optional()
