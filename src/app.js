@@ -8,7 +8,7 @@ const statsRoutes = require("./routes/stats.routes");
 const logger = require("./middlewares/logger.middleware");
 const notFound = require("./middlewares/notFound.middleware");
 const errorHandler = require("./middlewares/errorHandler.middleware");
-const categoryRouter = require("./routes/category.route");
+const categoryRouter = require("./routes/category.routes");
 
 const app = express();
 app.use(cors());
@@ -37,7 +37,7 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/todos", todoRoutes);
 app.use("/api/stats", statsRoutes);
-app.use("/api/categories", categoryRouter);
+app.use("/api/categories", categoryRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
