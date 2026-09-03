@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const todoRoutes = require("./routes/todo.routes");
@@ -9,7 +10,7 @@ const notFound = require("./middlewares/notFound.middleware");
 const errorHandler = require("./middlewares/errorHandler.middleware");
 
 const app = express();
-
+app.use(cors());
 app.use(logger);
 app.use(express.json());
 
