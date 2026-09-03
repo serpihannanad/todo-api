@@ -106,7 +106,15 @@ cp .env.example .env
 | `NODE_ENV`         | Ya    | `development` / `test` / `production`   | Menentukan mode aplikasi berjalan (lihat penjelasan di bawah) |
 | `JWT_SECRET`       | Ya    | string acak & panjang                   | Kunci rahasia untuk menandatangani token JWT                  |
 | `JWT_EXPIRES_IN`   | Ya    | `1d`                                    | Masa berlaku token JWT                                        |
-| `EXTERNAL_API_KEY` | Ya    | string acak & panjang                   | Kunci akses untuk endpoint `/api/stats`                       |
+| `EXTERNAL_API_KEY` | Ya    |e8e431750a5c3aaca13c76c0861cfb17435189f36| Kunci akses untuk endpoint `/api/stats`                       |
+|                    |       | 32b527790a309c2cb6c6cca                 |                                                               |
+
+## Autentikasi & Header API Key
+
+Untuk mengakses endpoint khusus (seperti `/api/stats/summary`), masukkan header berikut:
+
+- **Header Key**: `x-api-key`
+- **Header Value**: `e8e431750a5c3aaca13c76c0861cfb17435189f3632b527790a309c2cb6c6cca` (Sesuai `EXTERNAL_API_KEY` di `.env`) 
 
 ## Menjalankan Project
 
