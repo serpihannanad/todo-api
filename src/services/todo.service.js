@@ -10,26 +10,22 @@ async function createTodo(data) {
   });
 
   return await todo.save();
-}
+};
 
 async function getAllTodos(ownerId, queryOptions) {
-  const { page = 1, limit = 10, completed, sortBy = "created_at", order = "desc" } = queryOptions;
+  const {
+    page = 1,
+    limit = 10,
+    completed,
+    sortBy = "created_at",
+    order = "desc",
+  } = queryOptions;
 
-  async function getAllTodos(ownerId, queryOptions) {
-    const {
-      page = 1,
-      limit = 10,
-      completed,
-      sortBy = "created_at",
-      order = "desc",
-    } = queryOptions;
-  
-    const filter = {
-      owner: ownerId,
-      archived: false,
-    };
+  // Deklarasi filter langsung di sini (tanpa dibungkus function lagi)
+  const filter = {
+    owner: ownerId,
+    archived: false,
   };
-  
 
   // Filter berdasarkan status completed, hanya jika parameter dikirim
   if (completed !== undefined) {
@@ -59,6 +55,35 @@ async function getAllTodos(ownerId, queryOptions) {
     },
   };
 }
+  
+
+  // Filter berdasarkan status completed, hanya jika parameter dikirim
+  if (completed !== undefined) {
+    filter.completed = completed === "true";
+  }
+
+  const sortDirection = order === "asc" ? 1 : -1;
+  const skip = (Number(page) - 1) * Number(limit);
+
+  const [todos, totalItems] = await Promise.all([
+    Todo.find(filter)
+      .sort({ [sortBy]: sortDirection })
+      .skip(skip)
+      .limit(Number(limit)),
+    Todo.countDocuments(filter),
+  ]);
+
+  const totalPages = Math.ceil(totalItems / Number(limit));
+
+  return {
+    todos,
+    pagination: {
+      currentPage: Number(page),
+      totalPages,
+      totalItems,
+      itemsPerPage: Number(limit),
+    },
+  };
 
 async function getAllTodosForAdmin(queryOptions) {
   const {
