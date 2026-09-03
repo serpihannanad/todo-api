@@ -9,10 +9,9 @@ const options = {
       description: "Dokumentasi API Todo List — dibangun bertahap dari seri artikel backend Node.js",
     },
     servers: [
-      {
-        url: "http://localhost:3000",
-        description: "Local development server",
-      },
+      { url: "/", description: "Current Server (Auto Detect / Vercel)" },
+      { url: "https://todo-api-nadya8.vercel.app", description: "Production server" },
+    
     ],
     components: {
       securitySchemes: {
