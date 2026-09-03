@@ -1,4 +1,5 @@
 const Todo = require("../models/todo.model");
+const ActivityLog = require("../models/activityLog.model"); // 1. Import model ActivityLog
 
 async function createTodo(data) {
   const todo = new Todo({
@@ -9,11 +10,21 @@ async function createTodo(data) {
     updated_by: data.updated_by,
   });
 
-  return await todo.save();
+  const savedTodo = await todo.save();
+
+  // 2. Log aktivitas saat Todo dibuat
+  await ActivityLog.create({
+    action: "CREATE_TODO",
+    todo_id: savedTodo._id,
+    user_id: data.owner,
+  });
+
+  return savedTodo;
 }
 
 async function getAllTodos(ownerId, queryOptions = {}) {
   const {
+    search,
     page = 1,
     limit = 10,
     completed,
@@ -25,12 +36,12 @@ async function getAllTodos(ownerId, queryOptions = {}) {
     archived: false,
   };
 
-  // Hanya set owner jika ownerId tersedia untuk mencegah error runtime
   if (ownerId) {
     filter.owner = ownerId;
   }
-
-  // Filter berdasarkan status completed
+  if (search) {
+    filter.title = { $regex: search, $options: "i" };
+  }
   if (completed !== undefined) {
     filter.completed = completed === "true";
   }
@@ -106,7 +117,7 @@ async function getTodoById(id) {
 }
 
 async function updateTodo(id, data) {
-  return await Todo.findByIdAndUpdate(
+  const updatedTodo = await Todo.findByIdAndUpdate(
     id,
     {
       title: data.title,
@@ -117,10 +128,32 @@ async function updateTodo(id, data) {
     },
     { new: true, runValidators: true }
   );
+
+  // 3. Log aktivitas saat Todo diubah
+  if (updatedTodo) {
+    await ActivityLog.create({
+      action: "UPDATE_TODO",
+      todo_id: updatedTodo._id,
+      user_id: data.updated_by,
+    });
+  }
+
+  return updatedTodo;
 }
 
-async function deleteTodo(id) {
-  return await Todo.findByIdAndDelete(id);
+async function deleteTodo(id, userId) {
+  const deletedTodo = await Todo.findByIdAndDelete(id);
+
+  // 4. Log aktivitas saat Todo dihapus
+  if (deletedTodo) {
+    await ActivityLog.create({
+      action: "DELETE_TODO",
+      todo_id: deletedTodo._id,
+      user_id: userId || deletedTodo.owner,
+    });
+  }
+
+  return deletedTodo;
 }
 
 async function getSummaryStats() {

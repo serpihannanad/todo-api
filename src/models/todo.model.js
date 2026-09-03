@@ -47,7 +47,15 @@ const todoSchema = new mongoose.Schema(
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
+  },
+  {
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      default: null
+    }
   }
+  
 );
 
 module.exports = mongoose.model("Todo", todoSchema);
