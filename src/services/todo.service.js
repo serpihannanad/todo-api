@@ -10,9 +10,9 @@ async function createTodo(data) {
   });
 
   return await todo.save();
-};
+}
 
-async function getAllTodos(ownerId, queryOptions) {
+async function getAllTodos(ownerId, queryOptions = {}) {
   const {
     page = 1,
     limit = 10,
@@ -21,13 +21,16 @@ async function getAllTodos(ownerId, queryOptions) {
     order = "desc",
   } = queryOptions;
 
-  // Deklarasi filter langsung di sini (tanpa dibungkus function lagi)
   const filter = {
-    owner: ownerId,
     archived: false,
   };
 
-  // Filter berdasarkan status completed, hanya jika parameter dikirim
+  // Hanya set owner jika ownerId tersedia untuk mencegah error runtime
+  if (ownerId) {
+    filter.owner = ownerId;
+  }
+
+  // Filter berdasarkan status completed
   if (completed !== undefined) {
     filter.completed = completed === "true";
   }
@@ -43,7 +46,7 @@ async function getAllTodos(ownerId, queryOptions) {
     Todo.countDocuments(filter),
   ]);
 
-  const totalPages = Math.ceil(totalItems / Number(limit));
+  const totalPages = Math.ceil(totalItems / Number(limit)) || 1;
 
   return {
     todos,
@@ -55,37 +58,8 @@ async function getAllTodos(ownerId, queryOptions) {
     },
   };
 }
-  
 
-  // Filter berdasarkan status completed, hanya jika parameter dikirim
-  if (completed !== undefined) {
-    filter.completed = completed === "true";
-  }
-
-  const sortDirection = order === "asc" ? 1 : -1;
-  const skip = (Number(page) - 1) * Number(limit);
-
-  const [todos, totalItems] = await Promise.all([
-    Todo.find(filter)
-      .sort({ [sortBy]: sortDirection })
-      .skip(skip)
-      .limit(Number(limit)),
-    Todo.countDocuments(filter),
-  ]);
-
-  const totalPages = Math.ceil(totalItems / Number(limit));
-
-  return {
-    todos,
-    pagination: {
-      currentPage: Number(page),
-      totalPages,
-      totalItems,
-      itemsPerPage: Number(limit),
-    },
-  };
-
-async function getAllTodosForAdmin(queryOptions) {
+async function getAllTodosForAdmin(queryOptions = {}) {
   const {
     page = 1,
     limit = 10,
@@ -114,7 +88,7 @@ async function getAllTodosForAdmin(queryOptions) {
     Todo.countDocuments(filter),
   ]);
 
-  const totalPages = Math.ceil(totalItems / Number(limit));
+  const totalPages = Math.ceil(totalItems / Number(limit)) || 1;
 
   return {
     todos,
@@ -135,15 +109,16 @@ async function updateTodo(id, data) {
   return await Todo.findByIdAndUpdate(
     id,
     {
-        title: data.title,
-        description: data.description,
-        completed: data.completed,
-        archived: data.archived,
-        updated_by: data.updated_by,
+      title: data.title,
+      description: data.description,
+      completed: data.completed,
+      archived: data.archived,
+      updated_by: data.updated_by,
     },
     { new: true, runValidators: true }
   );
 }
+
 async function deleteTodo(id) {
   return await Todo.findByIdAndDelete(id);
 }
