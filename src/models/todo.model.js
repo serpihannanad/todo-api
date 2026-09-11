@@ -41,6 +41,12 @@ const todoSchema = new mongoose.Schema(
       default: false,
       required: true,
     },
+      category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        default: null
+      }
+    
   },
   {
     timestamps: {
@@ -48,13 +54,6 @@ const todoSchema = new mongoose.Schema(
       updatedAt: "updated_at",
     },
   },
-  {
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-      default: null
-    }
-  }
   
 );
 

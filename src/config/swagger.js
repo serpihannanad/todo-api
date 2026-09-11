@@ -57,9 +57,46 @@ const options = {
             },
           },
         },
+        Category: {
+          type: "object",
+          properties: {
+            _id: {
+              type: "string",
+              example: "6aa34b542db75d4a68f44dc9",
+            },
+            name: {
+              type: "string",
+              example: "Belajar Coding",
+            },
+            description: {
+              type: "string",
+              example: "Kategori untuk belajar coding",
+            },
+            owner: {
+              type: "string",
+              example: "665f1a2b8b1e2a1a2c3d1111",
+            },
+            created_by: {
+              type: "string",
+              example: "665f1a2b8b1e2a1a2c3d1111",
+            },
+            archived: {
+              type: "boolean",
+              example: false,
+            },
+            created_at: {
+              type: "string",
+              format: "date-time",
+            },
+            updated_at: {
+              type: "string",
+              format: "date-time",
+            },
+          },
+        },
+      },
     },
   },
-},
   // Swagger akan mencari komentar dokumentasi di semua file route
   apis: ["./src/routes/*.js"],
 };

@@ -5,6 +5,7 @@ const swaggerSpec = require("./config/swagger");
 const todoRoutes = require("./routes/todo.routes");
 const authRoutes = require("./routes/auth.routes");
 const categoryRoutes = require("./routes/category.routes");
+const activityLogRoutes = require("./routes/activityLog.routes");
 const statsRoutes = require("./routes/stats.routes");
 const logger = require("./middlewares/logger.middleware");
 const notFound = require("./middlewares/notFound.middleware");
@@ -38,7 +39,9 @@ app.use(
 // Group Endpoints API
 app.use("/api/auth", authRoutes);
 app.use("/api/todos", todoRoutes);
+
 app.use("/api/categories", categoryRoutes);
+app.use("/api/activity-logs", activityLogRoutes);
 app.use("/api/stats", statsRoutes);
 
 // Error Middlewares
