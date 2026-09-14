@@ -18,6 +18,12 @@ const todoSchema = new mongoose.Schema(
       default: false,
     },
 
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      default: null,
+    },
+
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -41,20 +47,13 @@ const todoSchema = new mongoose.Schema(
       default: false,
       required: true,
     },
-      category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
-        default: null
-      }
-    
   },
   {
     timestamps: {
       createdAt: "created_at",
       updatedAt: "updated_at",
     },
-  },
-  
+  }
 );
 
 module.exports = mongoose.model("Todo", todoSchema);

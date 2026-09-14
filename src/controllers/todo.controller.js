@@ -3,11 +3,12 @@ const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/catchAsync");
 
 const createTodo = catchAsync(async (req, res, next) => {
-  const { title, description } = req.body;
+  const { title, description, category } = req.body;
 
   const todo = await todoService.createTodo({
     title,
     description,
+    category,
     owner: req.user._id,
     created_by: req.user._id,
     updated_by: req.user._id,
@@ -21,9 +22,16 @@ const createTodo = catchAsync(async (req, res, next) => {
 });
 
 const getAllTodos = catchAsync(async (req, res, next) => {
-  const { page, limit, completed, sortBy, order } = req.query;
-  const queryOptions = { page, limit, completed, sortBy, order };
+  const { search, page, limit, completed, sortBy, order } = req.query;
 
+  const queryOptions = {
+    search,
+    page,
+    limit,
+    completed,
+    sortBy,
+    order,
+  };
   const result =
     req.user.role === "admin"
       ? await todoService.getAllTodosForAdmin(queryOptions)
@@ -60,7 +68,7 @@ const getTodoById = catchAsync(async (req, res, next) => {
 
 const updateTodo = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const { title, description, completed, archived } = req.body;
+  const { title, description, category, completed, archived } = req.body;
 
   const existingTodo = await todoService.getTodoById(id);
 
@@ -77,6 +85,7 @@ const updateTodo = catchAsync(async (req, res, next) => {
   const updatedTodo = await todoService.updateTodo(id, {
     title,
     description,
+    category,
     completed,
     archived,
     updated_by: req.user._id,

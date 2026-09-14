@@ -5,6 +5,7 @@ async function createTodo(data) {
   const todo = new Todo({
     title: data.title,
     description: data.description,
+    category: data.category,
     owner: data.owner,
     created_by: data.created_by,
     updated_by: data.updated_by,
@@ -17,6 +18,7 @@ async function createTodo(data) {
     action: "CREATE_TODO",
     todo_id: savedTodo._id,
     user_id: data.owner,
+    snapshot: savedTodo.toObject(),
   });
 
   return savedTodo;
@@ -122,6 +124,7 @@ async function updateTodo(id, data) {
     {
       title: data.title,
       description: data.description,
+      category: data.category,
       completed: data.completed,
       archived: data.archived,
       updated_by: data.updated_by,
@@ -135,6 +138,7 @@ async function updateTodo(id, data) {
       action: "UPDATE_TODO",
       todo_id: updatedTodo._id,
       user_id: data.updated_by,
+      snapshot: updatedTodo.toObject(),
     });
   }
 
@@ -150,6 +154,7 @@ async function deleteTodo(id, userId) {
       action: "DELETE_TODO",
       todo_id: deletedTodo._id,
       user_id: userId || deletedTodo.owner,
+      snapshot: deletedTodo.toObject(),
     });
   }
 
